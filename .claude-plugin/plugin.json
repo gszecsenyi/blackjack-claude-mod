@@ -1,7 +1,13 @@
 {
   "name": "blackjack",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Claude offers a hand of blackjack while it works on a long task",
-  "author": { "name": "Gergely Szecsenyi" },
+  "author": {
+    "name": "Gergely Szecsenyi",
+    "url": "https://github.com/gszecsenyi"
+  },
+  "homepage": "https://github.com/gszecsenyi/blackjack-claude-mod",
+  "repository": "https://github.com/gszecsenyi/blackjack-claude-mod",
+  "keywords": ["claude-code", "claude-code-mod", "claude-code-plugin", "blackjack", "game", "tui"],
   "types": "./types/index.d.ts"
 }

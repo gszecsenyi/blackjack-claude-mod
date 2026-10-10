@@ -1,0 +1,17 @@
+{
+  "name": "blackjack-claude-mod",
+  "metadata": {
+    "description": "Blackjack for Claude Code: Claude offers a hand while it works on a long task."
+  },
+  "owner": {
+    "name": "Gergely Szecsenyi",
+    "url": "https://github.com/gszecsenyi"
+  },
+  "plugins": [
+    {
+      "name": "blackjack",
+      "source": "./",
+      "description": "Claude offers a hand of blackjack in a side pane while it works on a long task."
+    }
+  ]
+}

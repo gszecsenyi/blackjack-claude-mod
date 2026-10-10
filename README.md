@@ -21,11 +21,16 @@ When Claude starts a task it expects to take a while, it offers you a hand of bl
 
 ## Install
 
-```sh
-claude --plugin-dir /path/to/blackjack_mod
+Inside Claude Code:
+
+```
+/plugin marketplace add gszecsenyi/blackjack-claude-mod
+/plugin install blackjack@blackjack-claude-mod
+/reload-plugins
+/blackjack
 ```
 
-or set `CLAUDE_CODE_PLUGIN_DIRS=/path/to/blackjack_mod`.
+Or from a local clone: `claude --plugin-dir /path/to/blackjack-claude-mod`.
 
 ## Develop
 
