@@ -6,6 +6,8 @@ When Claude starts a task it expects to take a while, it offers you a hand of bl
 🃏 Big refactor – this will take a while. Fancy a hand of blackjack?  [ Play ] [ No thanks ] [ Don't ask again ]
 ```
 
+![The blackjack table in a Claude Code side pane](docs/screenshot.png)
+
 ## How it works
 
 - The mod registers a tool, `mcp__blackjack__offer_blackjack`. **Claude itself decides** when to call it: at the start of each long task. There is no timer or heuristic.
