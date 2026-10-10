@@ -23,9 +23,12 @@ const isOfferShown = atom({ plugin: 'blackjack', key: 'isOfferShown' } as const,
 const wasOffered = atom({ plugin: 'blackjack', key: 'wasOffered' } as const, false)
 const offerReason = atom({ plugin: 'blackjack', key: 'offerReason' } as const, '')
 
+const RULES =
+  'Get closer to 21 than the dealer without going over. Face cards are 10, aces 1 or 11; the dealer draws to 17, blackjack pays 3:2.'
+
 const DESCRIPTION = [
   'Offers the user a hand of blackjack in a side pane while you keep working.',
-  'Call it ONCE, right as you start a task you expect to take several minutes',
+  'Call it once per task, right as you start a task you expect to take several minutes',
   '(many files to change, a long build or test run, a broad refactor or investigation).',
   'Do not call it for short tasks or quick questions. It returns immediately; carry on with the task.',
 ].join(' ')
@@ -43,7 +46,7 @@ async function play($: EngineInterface, move: (g: Game) => Game) {
 }
 
 const openTable = ($: EngineInterface) =>
-  $.ui.open({ id: PANE, title: 'Blackjack', focus: true, closeOnEscape: true, rows: 9 })
+  $.ui.open({ id: PANE, title: 'Blackjack', focus: true, closeOnEscape: true, holdToasts: true, rows: 12 })
 
 const hand = (cards: readonly Card[], isHidden = false) =>
   cards.map((card, i) => (isHidden && i === 1 ? '🂠' : label(card))).join('  ')
@@ -74,7 +77,10 @@ export const register: Register = on => {
       return { result: 'The user turned blackjack offers off. Carry on with the task.' }
     }
     if (await read($, wasOffered)) {
-      return { result: 'Already offered this session. Carry on with the task.' }
+      return { result: 'Already offered for this task. Carry on with the task.' }
+    }
+    if ((await $.ui.panes()).some(pane => pane.id === PANE)) {
+      return { result: 'The user is already playing. Carry on with the task.' }
     }
     const reason = (e as { reason?: unknown }).reason
     await update($, offerReason, () => (typeof reason === 'string' ? reason.slice(0, 80) : ''))
@@ -93,9 +99,18 @@ export const register: Register = on => {
 
   on('turn.complete', async ($, e, next) => {
     await update($, isOfferShown, () => false)
+    await update($, wasOffered, () => false)
     const isPlaying = (await $.ui.panes()).some(pane => pane.id === PANE)
     if (isPlaying) {
-      $.ui.toast('Claude is done – your game will wait.', { timeoutMs: 6000 })
+      $.ui.status('🃏 Claude is done – your game will wait.')
+    }
+
+    return next(e)
+  })
+
+  on('ui.close', ($, e, next) => {
+    if (e.id === PANE) {
+      $.ui.status(undefined)
     }
 
     return next(e)
@@ -142,9 +157,12 @@ export const register: Register = on => {
     const g = (await read($, game)) ?? newGame(await loadChips($))
     const isLive = g.phase === 'player'
     const random = cryptoRandom
+    const keys = isLive ? `h Hit · s Stand${canDouble(g) ? ' · d Double' : ''}` : 'n Deal'
+    const help = `${keys} · ←→/Tab move · Enter press · Esc close`
 
     return (
       <Box flexDirection="column">
+        <Text dimColor>{RULES}</Text>
         {g.phase === 'idle' ? (
           <Text dimColor>Press Deal (n) to start. Bet: 50.</Text>
         ) : (
@@ -178,6 +196,7 @@ export const register: Register = on => {
           )}
           <Button key="close" label="Close" role="dismiss" dimColor onPress={() => $.ui.close({ id: PANE })} />
         </Box>
+        <Text dimColor>{help}</Text>
       </Box>
     )
   })

@@ -16,19 +16,23 @@ test('the table deals and plays a hand', async ($, on) => {
   for (const surface of SURFACES) {
     const ui = await $.ui.mount({ plugin: 'blackjack', surface, ...PANE })
     expect(await ui.find({ key: 'deal' })).toBeDefined()
+    expect(await ui.find({ type: 'Text', text: /closer to 21/ })).toBeDefined()
     await ui.press({ key: 'deal' })
+    expect(await ui.find({ type: 'Text', text: /(n Deal|h Hit).*Esc close/ })).toBeDefined()
     const stand = await ui.find({ key: 'stand' })
     if (stand) {
       await ui.press({ key: 'stand' })
     }
     expect(await ui.find({ key: 'deal' })).toBeDefined()
     expect(await ui.find({ type: 'Text', text: /Chips/ })).toBeDefined()
+    expect(await ui.find({ type: 'Text', text: /n Deal.*Esc close/ })).toBeDefined()
     await ui.unmount()
   }
 })
 
-test('the offer shows once after the tool is called', async ($, on) => {
+test('the offer shows once per task', async ($, on) => {
   mock.store(on)
+  on('ui.panes', () => ({ value: [] }))
   on('ui.render', { component: 'AbovePrompt' }, ($, e) => {
     const { Text } = $.ui.resolve(e)
 

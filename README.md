@@ -8,13 +8,13 @@ When Claude starts a task it expects to take a while, it offers you a hand of bl
 
 ## How it works
 
-- The mod registers a tool, `mcp__blackjack__offer_blackjack`. **Claude itself decides** when to call it: once, at the start of a long task. There is no timer or heuristic.
-- The offer appears as a band above the prompt. It makes the offer at most once per session, and **Don't ask again** turns it off for good.
+- The mod registers a tool, `mcp__blackjack__offer_blackjack`. **Claude itself decides** when to call it: at the start of each long task. There is no timer or heuristic.
+- The offer appears as a band above the prompt: at most once per task, never while you're already playing. **Don't ask again** turns it off for good.
 - The game runs locally in a pane: it uses no tokens, and the model never sees it.
-  - Keys: `h` Hit, `s` Stand, `d` Double, `n` new deal, `Esc` back to the prompt.
+  - Keys: `h` Hit, `s` Stand, `d` Double, `n` new deal; arrows/Tab move between buttons, Enter presses; `Esc` closes the table.
   - Rules: a 4-deck shoe, the dealer draws to 17, blackjack pays 3:2, the bet is 50.
 - Chips persist across sessions. You start with 1000, and when you run out you get a fresh 1000.
-- When Claude finishes, you get a toast, and the game stays open.
+- When Claude finishes, the status line tells you, and the game stays open.
 - `/blackjack` opens the table at any time, even while a turn is running.
 
 ## Install
