@@ -38,3 +38,7 @@ Or from a local clone: `claude --plugin-dir /path/to/blackjack-claude-mod`.
 claude plugin validate .
 claude plugin test .
 ```
+
+## License
+
+MIT – see [LICENSE](LICENSE).

@@ -8,6 +8,7 @@
   },
   "homepage": "https://github.com/gszecsenyi/blackjack-claude-mod",
   "repository": "https://github.com/gszecsenyi/blackjack-claude-mod",
+  "license": "MIT",
   "keywords": ["claude-code", "claude-code-mod", "claude-code-plugin", "blackjack", "game", "tui"],
   "types": "./types/index.d.ts"
 }
